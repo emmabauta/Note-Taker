@@ -32,9 +32,10 @@ module.exports = function (app) {
     app.delete("/api/notes/:id", function (req, res) {
         console.log(req.params.id, 1);
         console.log("Note" + req.params.id + "deleted.");
+        var notes =JSON.parse(data)
         fs.readFile(path.join(__dirname, "../db/db.json"), JSON.stringify(notes), function (err) {
             if (err) throw err;
-            notes.splice(req.body);
+            notes.splice(req.body.id);
             
         fs.writeFile(path.join(__dirname, "../db/db.json"), JSON.stringify(notes), function (err) {
             if (err) throw err;
