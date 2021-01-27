@@ -29,21 +29,24 @@ module.exports = function (app) {
         });
     });
 
-    // app.delete("/api/notes/:id", function (req, res) {
-    //     console.log(req.params.id, 1);
-    //     console.log("Note " + req.params.id + " deleted.");
-    //     var notes =JSON.parse(data)
-    //     fs.readFile(path.join(__dirname, "../db/db.json"), JSON.stringify(notes), function (err) {
-    //         if (err) throw err;
-    //         notes.filter(req.body.id);
+    app.delete("/api/notes/:id", function (req, res) {
+        console.log(req.params.id, 1);
+        console.log("Note " + req.params.id + " deleted.");
+        fs.readFile(path.join(__dirname, "../db/db.json"), 'utf8', function (err, data) {
+            var notes =JSON.parse(data)
+            if (err) throw err;
             
-    //     fs.writeFile(path.join(__dirname, "../db/db.json"), JSON.stringify(notes), function (err) {
-    //         if (err) throw err;
-    //             fs.readFile(path.join(__dirname, "../db/db.json"), 'utf8', function (err, data) {
-    //                 if (err) throw err;
-    //                 return res.json(JSON.parse(data));
-    //             });
-    //         });
-    //     });
-    // });
+            notes = notes.filter(function(note){
+             return note.id != req.params.id;
+            });
+            
+        fs.writeFile(path.join(__dirname, "../db/db.json"), JSON.stringify(notes), function (err) {
+            if (err) throw err;
+                fs.readFile(path.join(__dirname, "../db/db.json"), 'utf8', function (err, data) {
+                    if (err) throw err;
+                    return res.json(JSON.parse(data));
+                });
+            });
+        });
+    });
 }
